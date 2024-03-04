@@ -14,14 +14,17 @@ def generate_launch_description():
     PythonLaunchDescriptionSource([get_package_share_directory('gz_example_robot_description'), '/launch', '/sim_robot.launch.py']),
     launch_arguments={}.items(),
     )
+
     # Include SLAM Toolbox standard launch file
     launch_slamtoolbox = IncludeLaunchDescription(
     PythonLaunchDescriptionSource([get_package_share_directory('slam_toolbox'), '/launch', '/online_async_launch.py']),
     launch_arguments={}.items(),
     )
 
+
     # Add actions to LaunchDescription
     ld.add_action(SetParameter(name='use_sim_time', value=True))
     ld.add_action(launch_gazebo)
     ld.add_action(launch_slamtoolbox)
+
     return ld

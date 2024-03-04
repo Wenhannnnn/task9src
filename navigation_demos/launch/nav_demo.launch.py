@@ -38,6 +38,15 @@ def generate_launch_description():
     launch_arguments={}.items(),
     )
 
+
+    static_transform_publisher_node = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='link1_broadcaster',
+        arguments=['0', '0', '0', '0', '0', '0', '1', 'map', 'odom'],
+        output='screen',
+    )
+
     # Behaviour Tree Navigator
     node_bt_nav = Node(
         package='nav2_bt_navigator',
@@ -82,6 +91,9 @@ def generate_launch_description():
     ld.add_action(SetParameter(name='use_sim_time', value=True))
     ld.add_action(launch_gazebo)
     ld.add_action(launch_slamtoolbox)
+
+    ld.add_action(static_transform_publisher_node)
+
     ld.add_action(node_bt_nav)
     ld.add_action(node_behaviour)
     ld.add_action(node_planner)
