@@ -17,6 +17,7 @@ def generate_launch_description():
     remappings = [('/tf', 'tf'), ('/tf_static', 'tf_static')]
 
     lifecycle_nodes = [
+        'controller_server',
         'planner_server',
         'behaviour_server',
         'bt_navigator',
@@ -25,7 +26,7 @@ def generate_launch_description():
     # LOAD PARAMETERS FROM YAML FILES
     config_bt_nav     = PathJoinSubstitution([pkg_nav_demos, 'config', 'bt_nav.yaml'])
     config_planner    = PathJoinSubstitution([pkg_nav_demos, 'config', 'planner.yaml'])
-
+    config_controller = PathJoinSubstitution([pkg_nav_demos, 'config', 'controller.yaml'])
     # Include Gazebo Simulation
     launch_gazebo = IncludeLaunchDescription(
     PythonLaunchDescriptionSource([get_package_share_directory('gz_example_robot_description'), '/launch', '/sim_robot.launch.py']),
@@ -77,6 +78,16 @@ def generate_launch_description():
         remappings=remappings,
     )
 
+    # Controller Server Node
+    node_controller = Node(
+        package='nav2_controller',
+        executable='controller_server',
+        name='controller_server',
+        output='screen',
+        parameters=[config_controller],
+        remappings=remappings,
+    )
+
     # Lifecycle Node Manager to automatically start lifecycles nodes (from list)
     node_lifecycle_manager = Node(
         package='nav2_lifecycle_manager',
@@ -97,6 +108,7 @@ def generate_launch_description():
     ld.add_action(node_bt_nav)
     ld.add_action(node_behaviour)
     ld.add_action(node_planner)
+    ld.add_action(node_controller)
     ld.add_action(node_lifecycle_manager)
 
     return ld

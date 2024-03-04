@@ -84,7 +84,7 @@ def generate_launch_description():
                     "/tf@tf2_msgs/msg/TFMessage[ignition.msgs.Pose_V",
                     "/imu/data_raw@sensor_msgs/msg/Imu[ignition.msgs.IMU",
                     "/camera/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo",
-                    "/camera/image_raw@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo",
+                    # "/camera/image_raw@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo",
                     "/joint_states@sensor_msgs/msg/JointState[ignition.msgs.Model",
 
             ],
