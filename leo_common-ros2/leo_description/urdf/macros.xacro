@@ -523,7 +523,7 @@
     <!-- lidar -->
     <gazebo reference="${link_prefix}lidar_link">
     <sensor type="gpu_lidar" name="generic_lidar_sensor">
-      <topic>${link_prefix}lidar/scan</topic>
+      <topic>${link_prefix}/scan</topic>
       <frame_id>lidar_link</frame_id>
       <ignition_frame_id>${link_prefix}lidar_link</ignition_frame_id>
 

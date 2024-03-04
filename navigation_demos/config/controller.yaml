@@ -84,7 +84,7 @@ local_costmap:
         enabled: True
         observation_sources: scan_source
         scan_source:
-          topic: /lidar/scan
+          topic: /scan
           max_obstacle_height: 2.0
           clearing: True
           marking: True
