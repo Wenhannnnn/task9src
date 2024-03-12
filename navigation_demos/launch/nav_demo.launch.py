@@ -4,9 +4,19 @@ from launch.actions import IncludeLaunchDescription
 from launch_ros.actions import SetParameter, Node
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import PathJoinSubstitution
-
+from launch.substitutions import LaunchConfiguration
+from launch.actions import DeclareLaunchArgument
 
 def generate_launch_description():
+    #lidar
+    channel_type = LaunchConfiguration('channel_type', default='serial')
+    serial_port = LaunchConfiguration('serial_port', default='/dev/ttyUSB0')
+    serial_baudrate = LaunchConfiguration('serial_baudrate', default='256000')
+    frame_id = LaunchConfiguration('frame_id', default='laser')
+    inverted = LaunchConfiguration('inverted', default='false')
+    angle_compensate = LaunchConfiguration('angle_compensate', default='true')
+    scan_mode = LaunchConfiguration('scan_mode', default='Sensitivity')
+
     ld = LaunchDescription()
 
     # Parameters, Nodes and Launch files go here
@@ -97,18 +107,72 @@ def generate_launch_description():
         parameters=[{'autostart': True}, {'node_names': lifecycle_nodes}],
     )
 
+    #add launch arguments
+    channel_type_launch_arg = DeclareLaunchArgument(
+        'channel_type',
+        default_value=channel_type,
+        description='Specifying channel type of lidar')
+
+    serial_port_launch_arg = DeclareLaunchArgument(
+        'serial_port',
+        default_value=serial_port,
+        description='Specifying usb port to connected lidar')
+
+    serial_baudrate_launch_arg = DeclareLaunchArgument(
+        'serial_baudrate',
+        default_value=serial_baudrate,
+        description='Specifying usb port baudrate to connected lidar')
+
+    frame_id_launch_arg = DeclareLaunchArgument(
+        'frame_id',
+        default_value=frame_id,
+        description='Specifying frame_id of lidar')
+
+    inverted_launch_arg = DeclareLaunchArgument(
+        'inverted',
+        default_value=inverted,
+        description='Specifying whether or not to invert scan data')
+
+    angle_compensate_launch_arg = DeclareLaunchArgument(
+        'angle_compensate',
+        default_value=angle_compensate,
+        description='Specifying whether or not to enable angle_compensate of scan data')
+
+    scan_mode_launch_arg = DeclareLaunchArgument(
+        'scan_mode',
+        default_value=scan_mode,
+        description='Specifying scan mode of lidar')
+
+    # rplidar node
+    rplidar_node = Node(
+        package='rplidar_ros',
+        executable='rplidar_node',
+        name='rplidar_node',
+        parameters=[{'channel_type': channel_type,
+                     'serial_port': serial_port,
+                     'serial_baudrate': serial_baudrate,
+                     'frame_id': frame_id,
+                     'inverted': inverted,
+                     'angle_compensate': angle_compensate}],
+        output='screen')
 
     # Add actions to LaunchDescription
     ld.add_action(SetParameter(name='use_sim_time', value=True))
     ld.add_action(launch_gazebo)
     ld.add_action(launch_slamtoolbox)
-
     ld.add_action(static_transform_publisher_node)
-
     ld.add_action(node_bt_nav)
     ld.add_action(node_behaviour)
     ld.add_action(node_planner)
     ld.add_action(node_controller)
     ld.add_action(node_lifecycle_manager)
+    ld.add_action(channel_type_launch_arg)
+    ld.add_action(serial_port_launch_arg)
+    ld.add_action(serial_baudrate_launch_arg)
+    ld.add_action(frame_id_launch_arg)
+    ld.add_action(inverted_launch_arg)
+    ld.add_action(angle_compensate_launch_arg)
+    ld.add_action(scan_mode_launch_arg)
+    ld.add_action(rplidar_node)
 
     return ld
