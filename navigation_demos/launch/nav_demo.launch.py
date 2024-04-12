@@ -173,6 +173,6 @@ def generate_launch_description():
     ld.add_action(inverted_launch_arg)
     ld.add_action(angle_compensate_launch_arg)
     ld.add_action(scan_mode_launch_arg)
-    ld.add_action(rplidar_node)
+    #ld.add_action(rplidar_node)
 
     return ld
