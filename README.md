@@ -8,7 +8,7 @@ navigation_demos
 
 ## launch  
 
-```python
+```commandline
 ros2 launch navigation_demos nav_demo.launch.py
 ```
 
@@ -22,3 +22,8 @@ gz_example_robot_description/urdf/leo_sim.urdf.xacro use another urdf file, leo_
 
 this procedure above will be simplified later..  
 
+## Update on 12 Apr
+Added package m-explore-ros2. To start automatic mapping, run
+```commandline
+ros2 launch explore_lite explore.launch.py
+```
